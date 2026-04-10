@@ -119,18 +119,6 @@ function StyleGuidePageContent() {
               </div>
               
               <div className="flex gap-8 items-center">
-                {/* GitHub Template Button */}
-                <a
-                  className="contents"
-                  href="https://github.com/firecrawl/firecrawl"
-                  target="_blank"
-                >
-                  <ButtonUI variant="secondary" className="border-border-system bg-card-bg hover:bg-border-system text-text-primary">
-                    <GithubIcon />
-                    Use this Template
-                  </ButtonUI>
-                </a>
-
                 {/* Clerk Auth */}
                 <SignedOut>
                   <SignInButton mode="modal">

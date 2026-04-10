@@ -424,7 +424,7 @@ export default function ExecutionPanel({
                       document.body.removeChild(a);
                       URL.revokeObjectURL(url);
                     }}
-                    className="px-12 py-6 bg-accent-black hover:bg-white/100 text-white rounded-6 text-body-small font-medium transition-colors flex items-center gap-6"
+                    className="px-12 py-6 bg-accent-black hover:bg-primary-green text-white rounded-6 text-body-small font-medium transition-colors flex items-center gap-6"
                     title="Download workflow results as JSON"
                   >
                     <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -652,7 +652,7 @@ export default function ExecutionPanel({
               <button
                 onClick={handleRun}
                 disabled={hasMissingRequiredInputs}
-                className="w-full px-20 py-12 bg-accent-black hover:bg-white/100 text-white rounded-8 text-body-medium font-medium transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-8"
+                className="w-full px-20 py-12 bg-accent-black hover:bg-primary-green text-white rounded-8 text-body-medium font-medium transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-8"
               >
                 <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
@@ -1253,7 +1253,7 @@ export default function ExecutionPanel({
                       </div>
                       <button
                         onClick={handleReset}
-                        className="mt-8 w-full px-16 py-10 bg-accent-black hover:bg-white/100 text-white rounded-8 text-body-small font-medium transition-colors"
+                        className="mt-8 w-full px-16 py-10 bg-accent-black hover:bg-primary-green text-white rounded-8 text-body-small font-medium transition-colors"
                       >
                         Try Again
                       </button>
@@ -1280,7 +1280,7 @@ export default function ExecutionPanel({
                       </p>
                       <button
                         onClick={handleReset}
-                        className="mt-16 w-full px-16 py-10 bg-accent-black hover:bg-white/100 text-white rounded-8 text-body-small font-medium transition-colors"
+                        className="mt-16 w-full px-16 py-10 bg-accent-black hover:bg-primary-green text-white rounded-8 text-body-small font-medium transition-colors"
                       >
                         Run Again
                       </button>

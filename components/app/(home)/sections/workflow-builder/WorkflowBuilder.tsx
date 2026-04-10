@@ -146,13 +146,13 @@ const nodeCategories = [
   {
     category: "Finance (DeFi)",
     nodes: [
-      { type: "defi-monitor", label: "DeFi Monitor", color: "bg-blue-600", icon: Coins },
+      { type: "defi-monitor", label: "DeFi Monitor", color: "bg-primary-green", icon: Coins },
     ],
   },
   {
     category: "Automation",
     nodes: [
-      { type: "task-automator", label: "Task Automator", color: "bg-purple-600", icon: Calendar },
+      { type: "task-automator", label: "Task Automator", color: "bg-primary-green", icon: Calendar },
     ],
   },
 ];
