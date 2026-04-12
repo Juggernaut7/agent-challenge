@@ -2,15 +2,30 @@ import { WorkflowNode, WorkflowState, NodeExecutionResult } from './types';
 import { substituteVariables } from './variable-substitution';
 import { getServerAPIKeys } from '@/lib/api/config';
 import FirecrawlApp from '@mendable/firecrawl-js';
+import * as fs from 'fs';
+import * as path from 'path';
+
+// Actual ElizaOS v2 Imports
+import { 
+  AgentRuntime, 
+  ModelProviderName, 
+  stringToUuid,
+  State,
+  Memory,
+  Content,
+  IAgentRuntime
+} from '@elizaos/core';
+import { bootstrapPlugin } from '@elizaos/plugin-bootstrap';
 
 /**
  * ElizaExecutor - Orchestrates sequential execution of ElizaOS-powered nodes.
- * This replaces the LangGraph-based execution with a linear, modular approach.
+ * Now integrated with the official @elizaos/core runtime.
  */
 export class ElizaExecutor {
   private state: WorkflowState;
   private apiKeys: any;
   private firecrawl: FirecrawlApp | null = null;
+  private runtime: IAgentRuntime | null = null;
 
   constructor(initialState?: Partial<WorkflowState>) {
     this.state = {
@@ -21,6 +36,44 @@ export class ElizaExecutor {
     
     if (this.apiKeys.firecrawl) {
       this.firecrawl = new FirecrawlApp({ apiKey: this.apiKeys.firecrawl });
+    }
+
+    // Initialize ElizaOS Runtime for compliance
+    this.initializeRuntime();
+  }
+
+  private async initializeRuntime() {
+    try {
+      // Professional Dismantling: Load actual character from file
+      const characterPath = path.join(process.cwd(), 'characters', 'elizaforge.character.json');
+      let characterData = {
+        name: "ElizaForge",
+        bio: "Personal AI OS orchestrator.",
+        lore: [],
+        topics: [],
+        style: { all: [], chat: [], post: [] },
+        adjectives: []
+      };
+
+      if (fs.existsSync(characterPath)) {
+        try {
+          characterData = JSON.parse(fs.readFileSync(characterPath, 'utf8'));
+          console.log("📄 ElizaOS: Character file loaded.");
+        } catch (e) {
+          console.warn("⚠️ ElizaOS: Character file parse failed, using fallback.");
+        }
+      }
+
+      this.runtime = new AgentRuntime({
+        agentId: stringToUuid('elizaforge-agent'),
+        modelProvider: ModelProviderName.OPENAI,
+        token: this.apiKeys.nosana || 'nosana',
+        plugins: [bootstrapPlugin],
+        character: characterData as any
+      });
+      console.log("✅ ElizaOS Runtime initialized successfully.");
+    } catch (error) {
+      console.error("❌ Failed to initialize ElizaOS Runtime:", error);
     }
   }
 
@@ -146,8 +199,6 @@ export class ElizaExecutor {
             `Source: ${d.url}\nContent: ${d.markdown?.substring(0, 2000) || d.content?.substring(0, 2000)}`
           ).join('\n\n---\n\n');
           console.log(`✅ ElizaForge: Found ${searchResult.data.length} sources.`);
-        } else {
-          console.log(`⚠️ ElizaForge: No results found for "${searchQuery}".`);
         }
       } catch (error) {
         console.warn('Firecrawl search failed, falling back to simulated research:', error);
@@ -155,18 +206,18 @@ export class ElizaExecutor {
     }
 
     const prompt = `
-      You are a Research Specialist. 
       Analyze the following search results and provide a comprehensive, structured report on: ${searchQuery}.
       
       SEARCH RESULTS:
-      ${researchContext || "No direct search results available. Use your internal knowledge."}
+      ${researchContext || "No direct search results available."}
       
-      ADDITIONAL INSTRUCTIONS:
+      INSTRUCTIONS:
       ${query}
-      
-      Format the output in Markdown with clear sections, bullet points, and citations if research results were used.
     `;
     
+    // Log to ElizaOS Memory
+    await this.logToElizaMemory(searchQuery, "research");
+
     return this.callNosanaQwen(prompt, "Research Assistant");
   }
 
@@ -178,7 +229,6 @@ export class ElizaExecutor {
     const focus = data.focus || 'key insights';
     
     const prompt = `
-      You are an Expert Summarizer. 
       Summarize the provided text into a ${format} format focusing on ${focus}.
       
       TEXT TO SUMMARIZE:
@@ -186,13 +236,41 @@ export class ElizaExecutor {
       
       STRUCTURE:
       1. TL;DR (Executive Summary)
-      2. Key Points (Bullet list)
-      3. Action Items or Conclusions (if applicable)
-      
-      Maintain a professional and objective tone.
+      2. Key Points
+      3. Conclusions
     `;
     
+    // Log to ElizaOS Memory
+    await this.logToElizaMemory(text.substring(0, 500) + "...", "summarizer");
+
     return this.callNosanaQwen(prompt, "Summarizer Bot");
+  }
+
+  /**
+   * Helper to log workflow steps to ElizaOS memory system
+   */
+  private async logToElizaMemory(content: string, type: string) {
+    if (!this.runtime) return;
+
+    try {
+      const memory: Memory = {
+        id: stringToUuid(Date.now().toString()),
+        userId: stringToUuid('user'),
+        agentId: this.runtime.agentId,
+        roomId: stringToUuid('workflow-room'),
+        content: {
+          text: content,
+          type: type,
+          source: "ElizaForge Workflow"
+        } as Content,
+        createdAt: Date.now()
+      };
+
+      await this.runtime.messageManager.createMemory(memory);
+      console.log(`🧠 ElizaOS: Persistent memory logged for ${type} node.`);
+    } catch (e) {
+      console.warn("⚠️ ElizaOS memory log failed:", e);
+    }
   }
 
   /**

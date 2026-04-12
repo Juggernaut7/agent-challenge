@@ -3,6 +3,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Install dependencies
+RUN apk add --no-cache libc6-compat vips-dev build-base python3
 COPY package*.json ./
 RUN npm install
 

@@ -43,6 +43,10 @@
     "@copilotkit/react-ui": "^1.10.6",
     "@copilotkit/sdk-js": "^1.10.6",
     "@e2b/code-interpreter": "^2.0.1",
+    "@elizaos/core": "latest",
+    "@elizaos/plugin-bootstrap": "latest",
+    "@elizaos/plugin-openai": "latest",
+    "@elizaos/plugin-web-search": "latest",
     "@hookform/resolvers": "^5.2.2",
     "@langchain/core": "^0.3.78",
     "@langchain/langgraph": "^0.4.9",
@@ -102,6 +106,7 @@
     "tailwind-gradient-mask-image": "^1.2.0",
     "tailwind-merge": "^2.2.1",
     "usehooks-ts": "^3.1.1",
+    "sharp": "^0.33.5",
     "zod": "^3.25.76"
   },
   "devDependencies": {
