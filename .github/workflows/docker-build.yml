@@ -31,13 +31,11 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          # Sanitize keys (strip whitespace)
-          KEY="${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}"
-          URL="${{ secrets.NEXT_PUBLIC_CONVEX_URL }}"
+          # Create .env.local dynamically to guarantee worker process inheritance
+          echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'pk_test_Ym9ndXMtY2xlcmstNzIuY2xlcmsuYWNjb3VudHMuZGV2JA' }}" > .env.local
+          echo "NEXT_PUBLIC_CONVEX_URL=${{ secrets.NEXT_PUBLIC_CONVEX_URL || 'https://dummy.convex.cloud' }}" >> .env.local
+          echo "CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY || 'sk_test_bogus' }}" >> .env.local
           
-          # Use a valid-format fallback if secrets are missing or malformed to unblock the build
-          export NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="${KEY:-pk_test_Ym9ndXMtY2xlcmstNzIuY2xlcmsuYWNjb3VudHMuZGV2JA}"
-          export NEXT_PUBLIC_CONVEX_URL="${URL:-https://dummy.convex.cloud}"
           export NEXT_TELEMETRY_DISABLED=1
           export NODE_OPTIONS="--max-old-space-size=6144"
           
