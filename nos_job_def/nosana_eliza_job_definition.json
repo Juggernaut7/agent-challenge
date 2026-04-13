@@ -10,17 +10,23 @@
       "id": "elizaforge-agent",
       "args": {
         "image": "0xjuggernaut/elizaforge:latest",
-        "cmd": ["npm", "start"],
+        "cmd": ["pnpm", "start"],
         "gpu": true,
         "expose": 3000,
         "env": {
+          "NODE_ENV": "production",
+          "NEXT_PUBLIC_CONVEX_URL": "https://compassionate-ladybug-195.convex.cloud",
+          "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "pk_test_c3VwcmVtZS1mb3dsLTQ5LmNsZXJrLmFjY291bnRzLmRldiQ",
+          "CLERK_SECRET_KEY": "sk_test_UBLTofbQqG9dBaQr70NZy4ZeaodKvX7GptBudDuvxH",
+          "CLERK_JWT_ISSUER_DOMAIN": "https://supreme-fowl-49.clerk.accounts.dev",
+          "CONVEX_DEPLOYMENT": "dev:compassionate-ladybug-195",
           "OPENAI_API_KEY": "nosana",
           "OPENAI_API_URL": "https://5i8frj7ann99bbw9gzpprvzj2esugg39hxbb4unypskq.node.k8s.prd.nos.ci/v1",
-          "MODEL_NAME": "Qwen3.5-9B-FP8",
           "NOSANA_QWEN_URL": "https://5i8frj7ann99bbw9gzpprvzj2esugg39hxbb4unypskq.node.k8s.prd.nos.ci/v1",
           "NOSANA_MODEL_NAME": "Qwen3.5-9B-FP8",
           "NOSANA_API_KEY": "nosana",
-          "NODE_ENV": "production"
+          "NEXT_PUBLIC_CLERK_SIGN_IN_URL": "/sign-in",
+          "NEXT_PUBLIC_CLERK_SIGN_UP_URL": "/sign-up"
         }
       }
     }
