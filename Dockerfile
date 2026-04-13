@@ -32,8 +32,8 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
-# Copy ElizaOS character files if they exist
-COPY --from=builder /app/characters ./characters || true
+# Copy ElizaOS character files
+COPY --from=builder /app/characters ./characters
 
 USER nextjs
 
