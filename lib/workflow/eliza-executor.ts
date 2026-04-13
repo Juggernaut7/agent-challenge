@@ -8,7 +8,6 @@ import * as path from 'path';
 // Actual ElizaOS v2 Imports
 import { 
   AgentRuntime, 
-  ModelProviderName, 
   stringToUuid,
   State,
   Memory,
@@ -66,7 +65,7 @@ export class ElizaExecutor {
 
       this.runtime = new AgentRuntime({
         agentId: stringToUuid('elizaforge-agent'),
-        modelProvider: ModelProviderName.OPENAI,
+        modelProvider: "openai" as any,
         token: this.apiKeys.nosana || 'nosana',
         plugins: [bootstrapPlugin],
         character: characterData as any
