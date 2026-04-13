@@ -9,7 +9,7 @@
       "type": "container/run",
       "id": "elizaforge-agent",
       "args": {
-        "image": "juggernaut7/elizaforge:latest",
+        "image": "0xjuggernaut/elizaforge:latest",
         "cmd": ["npm", "start"],
         "gpu": true,
         "expose": 3000,

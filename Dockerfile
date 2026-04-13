@@ -4,16 +4,16 @@ WORKDIR /app
 
 # Install dependencies
 RUN apk add --no-cache libc6-compat vips-dev build-base python3
-COPY package*.json ./
-RUN npm install
+RUN npm install -g pnpm
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
 
 # Build Next.js app
-# We disable linting and type checking during build to ensure it succeeds in the container
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN npm run build
+RUN pnpm run build
 
 # Production Stage
 FROM node:20-alpine AS runner
@@ -42,4 +42,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]

@@ -102,11 +102,11 @@
     "react-hook-form": "^7.64.0",
     "react-syntax-highlighter": "^15.6.1",
     "server-only": "^0.0.1",
+    "sharp": "^0.34.5",
     "sonner": "^1.4.41",
     "tailwind-gradient-mask-image": "^1.2.0",
     "tailwind-merge": "^2.2.1",
     "usehooks-ts": "^3.1.1",
-    "sharp": "^0.33.5",
     "zod": "^3.25.76"
   },
   "devDependencies": {
