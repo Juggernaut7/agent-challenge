@@ -22,15 +22,27 @@ jobs:
           version: 9
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: |
+          pnpm install --frozen-lockfile
+          # Force a clean sharp build for the Linux environment
+          pnpm add sharp
 
       - name: Build Next.js app
-        run: pnpm run build
+        run: |
+          # The tee command ensures logs are captured and displayed
+          pnpm run build 2>&1 | tee build.log
         env:
           NEXT_PUBLIC_CONVEX_URL: ${{ secrets.NEXT_PUBLIC_CONVEX_URL }}
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
           NEXT_TELEMETRY_DISABLED: 1
           NODE_OPTIONS: "--max-old-space-size=6144"
+          # Fake these variables for build-time as they aren't needed for static analysis
+          OPENAI_API_KEY: "dummy"
+          FIRECRAWL_API_KEY: "dummy"
+
+      - name: Log build error on failure
+        if: failure()
+        run: cat build.log
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
