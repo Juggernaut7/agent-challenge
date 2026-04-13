@@ -28,9 +28,16 @@ jobs:
           pnpm add sharp
 
       - name: Build Next.js app
+        shell: bash
         run: |
-          # The tee command ensures logs are captured and displayed
+          set -o pipefail
           pnpm run build 2>&1 | tee build.log
+          echo "Listing .next directory structure:"
+          ls -la .next || echo ".next directory not found"
+          if [ -d ".next/standalone" ]; then
+            echo ".next/standalone exists"
+            ls -la .next/standalone
+          fi
         env:
           NEXT_PUBLIC_CONVEX_URL: ${{ secrets.NEXT_PUBLIC_CONVEX_URL }}
           NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }}
