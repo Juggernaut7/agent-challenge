@@ -10,7 +10,7 @@
       "id": "elizaforge-agent",
       "args": {
         "image": "0xjuggernaut/elizaforge:latest",
-        "cmd": ["npm", "start"],
+        "cmd": ["node", "server.js"],
         "gpu": true,
         "expose": 3000,
         "env": {
